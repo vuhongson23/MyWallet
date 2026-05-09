@@ -1,11 +1,7 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import React from "react";
-import {
-    StyleSheet,
-    TouchableOpacity,
-    View
-} from "react-native";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 interface CustomBottomTabBarProps {
@@ -34,14 +30,7 @@ export function CustomBottomTabBar({
   };
 
   return (
-    <View
-      style={[
-        styles.container,
-        {
-          paddingBottom: Math.max(insets.bottom, 10),
-        },
-      ]}
-    >
+    <View style={[styles.container]}>
       <View style={styles.tabBar}>
         {tabs.map((tab, index) => {
           if (tab.isCenter) {
@@ -97,7 +86,7 @@ export function CustomBottomTabBar({
               <MaterialCommunityIcons
                 name={tab.icon as any}
                 size={24}
-                color={isFocused ? "#8B5CF6" : "#999"}
+                color={isFocused ? "#7C6FE0" : "#999"}
               />
             </TouchableOpacity>
           );
@@ -112,7 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(15, 15, 20, 0.95)",
     borderTopWidth: 1,
     borderTopColor: "#2A2A32",
-    paddingTop: 8,
+    paddingTop: 0,
   },
   tabBar: {
     flexDirection: "row",
@@ -130,16 +119,16 @@ const styles = StyleSheet.create({
   centerButton: {
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 30,
+    marginBottom: 20,
   },
   floatingButton: {
     width: 60,
     height: 60,
     borderRadius: 30,
-    backgroundColor: "#8B5CF6",
+    backgroundColor: "#7C6FE0",
     alignItems: "center",
     justifyContent: "center",
-    shadowColor: "#8B5CF6",
+    shadowColor: "#7C6FE0",
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,
