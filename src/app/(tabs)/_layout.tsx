@@ -1,49 +1,51 @@
-import { Tabs } from "expo-router";
+import { CustomBottomTabBar } from "@/src/components/CustomBottomTabBar";
+import DashboardScreen from "@/src/features/dashboard/screens/index";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import React from "react";
+import ReportsScreen from "./reports";
+import TransactionsScreen from "./transactions";
+import WalletsScreen from "./wallets";
 
-import { HapticTab } from "@/src/components/haptic-tab";
-import { IconSymbol } from "@/src/components/ui/icon-symbol";
-import { Colors } from "@/src/shared/constants/theme";
-import { useColorScheme } from "@/src/shared/hooks/use-color-scheme.web";
+const Tab = createBottomTabNavigator();
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
-    <Tabs
+    <Tab.Navigator
+      tabBar={(props) => <CustomBottomTabBar {...props} />}
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? "light"].tint,
         headerShown: false,
-        tabBarButton: HapticTab,
       }}
     >
-      <Tabs.Screen
+      <Tab.Screen
         name="index"
-        options={{
-          title: "Chi tiêu",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
-          ),
+        component={DashboardScreen}
+        options={{ title: "Dashboard" }}
+      />
+      <Tab.Screen
+        name="transactions"
+        component={TransactionsScreen}
+        options={{ title: "Giao dịch" }}
+      />
+      <Tab.Screen
+        name="add"
+        component={() => null}
+        options={{ title: "Thêm" }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+          },
         }}
       />
-      <Tabs.Screen
-        name="explore"
-        options={{
-          title: "Thêm",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="paperplane.fill" color={color} />
-          ),
-        }}
+      <Tab.Screen
+        name="reports"
+        component={ReportsScreen}
+        options={{ title: "Báo cáo" }}
       />
-      <Tabs.Screen
-        name="dashboard"
-        options={{
-          title: "Bảng điều khiển",
-          tabBarIcon: ({ color }) => (
-            <IconSymbol size={28} name="house.fill" color={color} />
-          ),
-        }}
+      <Tab.Screen
+        name="wallets"
+        component={WalletsScreen}
+        options={{ title: "Cài nhập" }}
       />
-    </Tabs>
+    </Tab.Navigator>
   );
 }

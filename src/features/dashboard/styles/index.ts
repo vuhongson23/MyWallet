@@ -30,5 +30,6 @@ export const styles = StyleSheet.create({
     borderColor: "#7c6fe042",
     borderWidth: 1,
     overflow: "hidden",
+    marginBottom: 14,
   },
 });

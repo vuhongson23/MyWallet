@@ -1,11 +1,11 @@
+import Card from "@/src/components/ui/card";
 import Text from "@/src/shared/components/Text";
 import { View } from "react-native";
-import { styles } from "../styles";
-import SummaryCard from "./summaryCard";
+import SummaryCard from "./SummaryCard";
 
 export default function BalanceCard() {
   return (
-    <View style={styles.balanceCardWrapper}>
+    <Card cardStyle={{ overflow: "hidden", marginBottom: 14, padding: 20 }}>
       <View
         style={{
           position: "absolute",
@@ -88,6 +88,6 @@ export default function BalanceCard() {
         <SummaryCard amount={12000000} type="income" />
         <SummaryCard amount={4500000} type="expense" />
       </View>
-    </View>
+    </Card>
   );
 }
