@@ -1,8 +1,8 @@
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import React from "react";
-import { StyleSheet, TouchableOpacity, View } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { useEffect, useRef, useState } from "react";
+import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
+import { tabs } from "../shared/constants/tabBar";
 
 interface CustomBottomTabBarProps {
   state: any;
@@ -15,22 +15,53 @@ export function CustomBottomTabBar({
   descriptors,
   navigation,
 }: CustomBottomTabBarProps) {
-  const insets = useSafeAreaInsets();
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const rotateAnim = useRef(new Animated.Value(0)).current;
 
-  const tabs = [
-    { name: "index", label: "Dashboard", icon: "home" },
-    { name: "transactions", label: "Giao dịch", icon: "swap-horizontal" },
-    { name: "add", label: "Thêm", icon: "plus", isCenter: true },
-    { name: "reports", label: "Báo cáo", icon: "bar-chart" },
-    { name: "wallets", label: "Cài nhập", icon: "wallet" },
-  ];
+  useEffect(() => {
+    Animated.timing(rotateAnim, {
+      toValue: isOpen ? 135 : 0,
+      duration: 200,
+      useNativeDriver: true,
+    }).start();
+  }, [isOpen]);
+
+  const rotation = rotateAnim.interpolate({
+    inputRange: [0, 135],
+    outputRange: ["0deg", "135deg"],
+  });
 
   const handleAddPress = () => {
-    navigation.navigate("add-expense");
+    setIsOpen(!isOpen);
+  };
+
+  const getTabProps = (index: number) => {
+    const route = state.routes[index];
+    const isFocused = state.index === index;
+
+    if (!descriptors[route?.key]) return null;
+
+    const onPress = () => {
+      const event = navigation.emit({
+        type: "tabPress",
+        target: route.key,
+        canPreventDefault: true,
+      });
+
+      if (!isFocused && !event.defaultPrevented) {
+        navigation.navigate(route.name, { merge: true });
+      }
+    };
+
+    const onLongPress = () => {
+      navigation.emit({ type: "tabLongPress", target: route.key });
+    };
+
+    return { isFocused, onPress, onLongPress };
   };
 
   return (
-    <View style={[styles.container]}>
+    <View style={styles.container}>
       <View style={styles.tabBar}>
         {tabs.map((tab, index) => {
           if (tab.isCenter) {
@@ -41,52 +72,35 @@ export function CustomBottomTabBar({
                 onPress={handleAddPress}
                 activeOpacity={0.8}
               >
-                <View style={styles.floatingButton}>
+                <Animated.View
+                  style={[
+                    styles.floatingButton,
+                    {
+                      transform: [{ rotate: rotation }],
+                    },
+                  ]}
+                >
                   <Ionicons name="add" size={32} color="#fff" />
-                </View>
+                </Animated.View>
               </TouchableOpacity>
             );
           }
 
-          const routeName = state.routes[index]?.name;
-          const isFocused = state.index === index;
-          const descriptor = descriptors[state.routes[index]?.key];
-
-          if (!descriptor) return null;
-
-          const onPress = () => {
-            const event = navigation.emit({
-              type: "tabPress",
-              target: state.routes[index].key,
-              canPreventDefault: true,
-            });
-
-            if (!isFocused && !event.defaultPrevented) {
-              navigation.navigate(state.routes[index].name, {
-                merge: true,
-              });
-            }
-          };
-
-          const onLongPress = () => {
-            navigation.emit({
-              type: "tabLongPress",
-              target: state.routes[index].key,
-            });
-          };
+          const tabProps = getTabProps(index);
+          if (!tabProps) return null;
 
           return (
             <TouchableOpacity
               key={tab.name}
-              onPress={onPress}
-              onLongPress={onLongPress}
+              onPress={tabProps.onPress}
+              onLongPress={tabProps.onLongPress}
               style={styles.tabItem}
               activeOpacity={0.7}
             >
               <MaterialCommunityIcons
                 name={tab.icon as any}
                 size={24}
-                color={isFocused ? "#7C6FE0" : "#999"}
+                color={tabProps.isFocused ? "#7C6FE0" : "#999"}
               />
             </TouchableOpacity>
           );
@@ -101,7 +115,6 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(15, 15, 20, 0.95)",
     borderTopWidth: 1,
     borderTopColor: "#2A2A32",
-    paddingTop: 0,
   },
   tabBar: {
     flexDirection: "row",
