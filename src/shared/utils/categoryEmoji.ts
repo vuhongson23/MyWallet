@@ -2,13 +2,13 @@ export function getCategoryEmoji(category: string): string {
   const emojiMap: Record<string, string> = {
     food: "🍔",
     transport: "🚗",
-    entertainment: "🎬",
-    shopping: "🛍️",
-    utilities: "💡",
+    shopping: "🛒",
     health: "💊",
-    education: "📚",
-    other: "📌",
+    house: "🏠",
+    entertainment: "🎮",
+    education: "📕",
+    other: "⋯",
   };
 
-  return emojiMap[category] || "📌";
+  return emojiMap[category] || "⋯";
 }

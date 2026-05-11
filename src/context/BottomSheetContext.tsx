@@ -39,8 +39,7 @@ export function BottomSheetProvider({
         toggleBottomSheet,
       }}
     >
-      {" "}
-      {children}{" "}
+      {children}
     </BottomSheetContext.Provider>
   );
 }

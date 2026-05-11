@@ -1,7 +1,7 @@
 import { useBottomSheet } from "@/src/context/BottomSheetContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { Animated, StyleSheet, TouchableOpacity, View } from "react-native";
 import { tabs } from "../shared/constants/tabBar";
 
@@ -16,17 +16,16 @@ export function CustomBottomTabBar({
   descriptors,
   navigation,
 }: CustomBottomTabBarProps) {
-  const [isOpen, setIsOpen] = useState<boolean>(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
-  const { openBottomSheet } = useBottomSheet();
+  const { isVisible, toggleBottomSheet } = useBottomSheet();
 
   useEffect(() => {
     Animated.timing(rotateAnim, {
-      toValue: isOpen ? 135 : 0,
+      toValue: isVisible ? 135 : 0,
       duration: 200,
       useNativeDriver: true,
     }).start();
-  }, [isOpen]);
+  }, [isVisible]);
 
   const rotation = rotateAnim.interpolate({
     inputRange: [0, 135],
@@ -34,8 +33,7 @@ export function CustomBottomTabBar({
   });
 
   const handleAddPress = () => {
-    setIsOpen(!isOpen);
-    openBottomSheet();
+    toggleBottomSheet();
   };
 
   const getTabProps = (index: number) => {
@@ -123,7 +121,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-around",
     alignItems: "center",
-    height: 60,
+    height: 65,
     paddingHorizontal: 10,
   },
   tabItem: {
@@ -135,11 +133,11 @@ const styles = StyleSheet.create({
   centerButton: {
     alignItems: "center",
     justifyContent: "center",
-    marginBottom: 20,
+    marginBottom: 0,
   },
   floatingButton: {
-    width: 60,
-    height: 60,
+    width: 55,
+    height: 55,
     borderRadius: 30,
     backgroundColor: "#7C6FE0",
     alignItems: "center",

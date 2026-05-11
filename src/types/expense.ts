@@ -5,7 +5,7 @@ export type ExpenseCategory =
   | "transport"
   | "entertainment"
   | "shopping"
-  | "utilities"
+  | "house"
   | "health"
   | "education"
   | "other";
@@ -38,7 +38,7 @@ export const CATEGORY_LABELS: Record<ExpenseCategory, string> = {
   transport: "Giao thông",
   entertainment: "Giải trí",
   shopping: "Mua sắm",
-  utilities: "Tiện ích",
+  house: "Nhà ở",
   health: "Sức khỏe",
   education: "Giáo dục",
   other: "Khác",
@@ -49,7 +49,7 @@ export const CATEGORY_COLORS: Record<ExpenseCategory, string> = {
   transport: "#4ECDC4",
   entertainment: "#FFE66D",
   shopping: "#FF8C42",
-  utilities: "#95E1D3",
+  house: "#95E1D3",
   health: "#F38181",
   education: "#AA96DA",
   other: "#CCCCCC",
