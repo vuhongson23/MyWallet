@@ -1,3 +1,4 @@
+import { useBottomSheet } from "@/src/context/BottomSheetContext";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import MaterialCommunityIcons from "@expo/vector-icons/MaterialCommunityIcons";
 import { useEffect, useRef, useState } from "react";
@@ -17,6 +18,7 @@ export function CustomBottomTabBar({
 }: CustomBottomTabBarProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const rotateAnim = useRef(new Animated.Value(0)).current;
+  const { openBottomSheet } = useBottomSheet();
 
   useEffect(() => {
     Animated.timing(rotateAnim, {
@@ -33,6 +35,7 @@ export function CustomBottomTabBar({
 
   const handleAddPress = () => {
     setIsOpen(!isOpen);
+    openBottomSheet();
   };
 
   const getTabProps = (index: number) => {

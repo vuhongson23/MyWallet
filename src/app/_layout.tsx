@@ -10,7 +10,11 @@ import { StatusBar } from "expo-status-bar";
 import { useEffect } from "react";
 import "react-native-reanimated";
 
+import { GlobalBottomSheet } from "@/src/components/GlobalBottomSheet";
+import { BottomSheetProvider } from "@/src/context/BottomSheetContext";
 import { ExpenseProvider } from "@/src/context/ExpenseContext";
+import { BottomSheetModalProvider } from "@gorhom/bottom-sheet";
+import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { useColorScheme } from "../shared/hooks/use-color-scheme.web";
 
 SplashScreen.preventAutoHideAsync();
@@ -39,29 +43,38 @@ export default function RootLayout() {
   }
 
   return (
-    <ExpenseProvider>
-      <ThemeProvider value={colorScheme === "dark" ? DarkTheme : DefaultTheme}>
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen
-            name="add-expense"
-            options={{
-              presentation: "modal",
-              title: "Thêm chi tiêu",
-              headerBackTitle: "Quay lại",
-            }}
-          />
-          <Stack.Screen
-            name="edit-expense"
-            options={{
-              presentation: "modal",
-              title: "Chỉnh sửa chi tiêu",
-              headerBackTitle: "Quay lại",
-            }}
-          />
-        </Stack>
-        <StatusBar style="auto" />
-      </ThemeProvider>
-    </ExpenseProvider>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <BottomSheetModalProvider>
+        <BottomSheetProvider>
+          <ExpenseProvider>
+            <ThemeProvider
+              value={colorScheme === "dark" ? DarkTheme : DefaultTheme}
+            >
+              <Stack>
+                <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+                <Stack.Screen
+                  name="add-expense"
+                  options={{
+                    presentation: "modal",
+                    title: "Thêm chi tiêu",
+                    headerBackTitle: "Quay lại",
+                  }}
+                />
+                <Stack.Screen
+                  name="edit-expense"
+                  options={{
+                    presentation: "modal",
+                    title: "Chỉnh sửa chi tiêu",
+                    headerBackTitle: "Quay lại",
+                  }}
+                />
+              </Stack>
+              <StatusBar style="auto" />
+            </ThemeProvider>
+          </ExpenseProvider>
+          <GlobalBottomSheet />
+        </BottomSheetProvider>
+      </BottomSheetModalProvider>
+    </GestureHandlerRootView>
   );
 }
